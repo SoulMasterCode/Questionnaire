@@ -1,0 +1,48 @@
+<h3>Seccion</h3>
+<div class="form-group">
+    <input
+    class="form-control {% if form.questionnaire.errors %}is-invalid{% endif %}"
+    type="text"
+    name="questionnaire"
+    placeholder="{{section.section}}"
+    >
+    <div class="invalid-feedback">
+        {% for error in form.questionnaire.errors %}{{ error }}{% endfor %}
+    </div>
+</div>
+<h5>Pregunta(s)</h5>
+{% for question in questions %}
+    {% for item in question %}
+        {% if item.section == section %}
+            <div class="form-group">
+                <input
+                class="form-control {% if form.questionnaire.errors %}is-invalid{% endif %}"
+                type="text"
+                name="questionnaire"
+                placeholder="{{item.question}}"
+                >
+                <div class="invalid-feedback">
+                    {% for error in form.questionnaire.errors %}{{ error }}{% endfor %}
+                </div>
+            </div>
+            <p>Respuestas</p>
+            {% for answer in answers %}
+                {% for item_answer in answer %}
+                    {% if item == item_answer.question %}
+                    <div class="form-group">
+                        <input
+                            class="form-control {% if form.questionnaire.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="questionnaire"
+                             placeholder="{{item_answer.answer}}"
+                                >
+                        <div class="invalid-feedback">
+                            {% for error in form.questionnaire.errors %}{{ error }}{% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}                               

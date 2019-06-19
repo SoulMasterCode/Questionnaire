@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+<title>@{{ request.user.username }} | Platzigram</title>
+{% endblock %}
+
+{% block container %}
+
+    <div class="container mb-5" style="margin-top: 8em;">
+        <div class="row">
+            <div class="col-sm-4 d-flex justify-content-center">
+                <img src="{{ request.user.profile.picture.url }}" alt="@{{ request.user.username}}" class="rounded-circle" width="150px" />
+            </div>
+            <div class="col-sm-8">
+                <h2 style="font-weight: 100;">
+                    {{ request.user.first_name }}
+                        <a
+                            href="{% url "users:update" %}"
+                            class="ml-5 btn btn-sm btn-outline-info"
+                        >
+                            Edit profile
+                        </a>
+                </h2>
+            </div>
+            <div class="container">
+                <div class="row justify-content-md-center">
+                    <div class="col-6 pb-3" id="profile-box">
+                        <h4 class="mb-4">Actualizar Custionario</h4>
+        
+                        <form method="POST" action="{% url 'questionary:new' %}">
+                            {% csrf_token %}
+        
+                            <input type="hidden" name="user" value="{{ user.pk}}" />
+                            <input type="hidden" name="profile" value="{{ profile.pk }}" />
+        
+                            {# Questionare fields #}
+                            <div class="form-group">
+                                <input
+                                    class="form-control {% if form.questionnaire.errors %}is-invalid{% endif %}"
+                                    type="text"
+                                    name="questionnaire"
+                                    placeholder="{{questionnaire}}"
+                                >
+                                <div class="invalid-feedback">
+                                    {% for error in form.questionnaire.errors %}{{ error }}{% endfor %}
+                                </div>
+                            </div>
+                            {% for section in sections %}
+                                {% include "questionary/particular_questionoire.html" %}
+                            {% endfor %}
+        
+                            <button type="submit" class="btn btn-primary btn-block mt-5">Guardar</button>
+        
+                            <!-- {% load static %}
+                            <script src="{% static 'js/inputs.js' %}"></script> -->
+                        </form>
+                    </div>
+                </div>      
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+{% endblock %}

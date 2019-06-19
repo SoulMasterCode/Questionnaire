@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+    <title>Cuestionarios</title>
+{% endblock%}
+
+{% block container %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12 col-md-8 offset-md-2 mt-5 p-0 post-container">
+                <h1 class="badge-dark" style="text-align: center">Cuestionarios</h1>
+                <div class="media pt-3 pl-3 pb-1">
+                    <img class="mr-3 rounded-circle" height="35" src="{{ request.user.profile.picture.url }}" alt="{{ request.user.get_full_name }}">
+                    <div class="media-body">
+                        <p style="margin-top: 5px;">{{ request.user.get_full_name  }}</p>
+                    </div>
+                </div>
+                
+                <h3 class="ml-2 mt-0 mb-2 list-group-flush" >
+                    {% for post in posts %}
+                    <div>
+                        <a class="list-group" href="{% url 'questionary:detail' post.pk %}">{{ post.questionnaire }}</a>
+                        <ul>
+                        {% for section in sections %}
+                            {% if post.pk == section.questionnaire.pk %}
+                            <li>{{section.section}}
+                                <ul>
+                                {% for que in ques %}
+                                    {% if section.pk == que.section.pk %}
+                                    <li>{{que.question}}
+                                            <ul>
+                                                {% for an in ans %}
+                                                    {% if que.pk == an.question.pk %}
+                                                        <li>{{an.answer}}</li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            </li>
+                          {% endif %}
+                        {% endfor %}
+                        </ul>
+                        
+                        <small style="font-size: 20px; color: gray">{{ post.created }}</small>
+                    </div>
+                    {% endfor %}
+                </h3>
+                {% include "pagination.html" %}
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
